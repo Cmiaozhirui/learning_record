@@ -1,0 +1,4 @@
+su git
+su - git
+useradd git
+passwd git

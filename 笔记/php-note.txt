@@ -1,0 +1,679 @@
+<?php
+1. 变量函数: 就是在变量后面加上小括弧，系统会寻找函数名与变量名相同的函数去执行
+2. 静态变量: 函数体内或者类里面用static 修饰变量; 当调用函数或者类的时候，执行完并不会释放变量(变量多次调用，类多次实例)，而是在内存中存着，当再次调用这个函数的时候，会用这个变量之前的值
+3. 变量传值赋值，传址赋值:  用&修饰就是传址赋值
+4. 函数调用传值赋值，传址赋值: 用&修饰就是传址赋值;
+5. 可变变量: 变量的名称是可以变化的，比如我们定义一个变量，变量名称用的是另一个变量，这个变量的值是可以发生变化的，那么这个可变变量的值也是可以发生变化的
+6. php里面的转义: 用反斜杠对特殊符号转义，转义成特殊标识；\$ 美元符号 \r回车 \n换行
+7. php -f 文件名称: 用来执行某个php文件
+8. c函数：1）用来设置配置项，2）用来获取配置项
+9. __isset: 当通过isset去检测对象成员属性的时候，会自动触发类里面__isset这个函数; __isset函数返回值不是boolean的话，会隐式转成boolean; 这个函数如果返回真说明有这个成员属性，最终检测结果为真，如果返回值为假的话，说明没有这个值，最终检测结果为真
+10. __unset: 当通过unset函数去删除对象的私有属性的的时候，会执行类方法__unset,并且接受要删除的成员属性名称;
+11.__get : 当我们实例一个对象的时候，访问对象里面不不存在属性的时候，会自动触发类里面__get这个方法，并且把要访问的成员属性名称传进去，最终得到的是函数的返回值
+12.__set: 当我们给对象不存在的属性赋值的时候, 会自动触发类方法__set,传进两个参数，第一是要赋值的成员属性名称，第二个是要赋的值
+13. __autoload: 当我们调用类的时候(实例化对象，或者继承某个类的时候),会自动触发__autoload这个函数，如果这个函数存在则执行，执行完重新实例对象，或重新执行继承
+14.abstract: 定义的抽象类，不能被实例化, 只能被继承；抽象类被继承的时候，里面的抽象方法一定要被重写; 抽象类里面的抽象方法不能有主体(例: abstract protected function sprot());
+抽象类中不一定有抽象方法，可以是普通公共的方法；但是有抽象方法的一定是抽象类;
+15.interface: 定义接口类, interface 后面直接跟着类名，不需要加class; 接口类不能被实例; 接口类里面的方法不能有主体{}
+16.其实抽象类和接口类就是形成一套规范，去规范子类的实现 
+17.php检测数组是否为空，如果数组是空数组，本身转成boolean就是空; empty($arr); $arr.length == 0;  
+18.类的静态方法里面不能调用$this, 会报错;
+19.session_start() 当执行这个函数的时候，会检测客户端cookie里面有没有sessionId,有的话，会根据这个sessionId到服务器拿到对应的session文件，把里面的数据拿出来初始化，放到$_SESSION里面供下文使用；如果没有的话，会生成一个sessionid(已两种形式存在)，1.在响应头里面以cookie的形式写到客户端去，2.在服务器端生成一个session文件，这个session文件的名称就已这个sessionid来命名；当访问应用的其他的页面的时候，cookie会带着这个sessionid
+20.extract($arr) 这个函数就是将数组打散, 将每一个键名变成独立的变量，键值变成对应的变量值; 此函数可以将对数组进行操作，执行这个函数的时候，会自动生成变量，数组的键名就是变量名，键值就是对应的变量值
+21. 子类继承父类的时候，如果子类没有构造方法，但父类有构造方法的时候；当实例子类的时候，会自动调用父类的构造方法
+22. const和define定义常量的区别,define不能定义类属性，const定义的常量不受命名空间的影响
+23. 复选框如果不选择的话，提交到后台php，是接受不到数据的,如果是文本表单的话，不写数据提交到后台的是空字符串
+function_exists(function_name);//检查函数是否存在
+布尔为false: 0 , 0.0 , '0', '' false, NUll, 空数组 //这些情况为false
+isset(var)//是否设置了某个变量
+unset(var)//删除变量
+
+// 判断变量的类型
+getType(var);//获取变量的类型
+is_bool(var)//变量是否是布尔值
+is_int(var)//变量是否是整形
+is_float(var)//变量是否是浮点型
+is_string(var)//变量是否是字符串
+is_null(var)//变量是否null
+is_array(var)//判断变量是否是数组
+
+settype(var, type)//设置类型
+echo "string";
+var_dump(expression)//打印变量的类型
+$_GET//获取get参数
+$_POST//获取post参数
+$_REQUEST//get参数和Post参数同时获取
+
+PHP_VERSION//获取php版本
+PHP_OS//显示服务器的操作系统版本
+define(name, value)//定义常量
+defined(name)//检测常量是否存在
+$GLOBALS//全局变量
+
+// ======加载文件
+include require//加载文件
+include_once require_once//只价值文件一次
+
+// ======时区操作
+date_default_timezone_get(oid)//获取时区
+date_default_timezone_set('PRC')//设置成东八区时间，就是北京时间
+
+// ======处理时间函数
+date('Y-m-d H:i:s', time())//格式化时间戳
+time();//获取时间戳
+microtime()//获取时间戳和微秒数
+strtotime(time)//将文本时间转成unix时间戳
+getdate()//获取日期信息,里面包含某年，某月，某日
+
+// ======处理数学函数
+ceil(value)//向上取整
+floor(value)//向下取整
+max(values)//获取一组数的最大值
+min(values)//获取一组数的最小值
+round(val)//
+mt_rand(oid)//获取某个范围内的随机整数
+pow(base, exp)//指数表达式
+
+// 操作文件
+file_put_contents(filename, data)//向文件里面写入内容
+file_get_contents(filename)//获取某个文件里面的内容
+
+// 打印函数
+echo //只能输出些简单的值(不能输出布尔值和数组)
+print //只能输出简单的值
+print_r(expression)//不能打印布尔值,但打印的结构比较简单
+var_dump(expression)//所有的值都可以打印，但结构比较复杂点
+
+//******************字符串处理函数************************************************
+trim(str)//去掉字符串里面所有的空格
+trim、ltrim、rtrim******* 去掉两边空格等 //去掉字符串左右两边的空格
+explode()、implode()********* 数组与字符串的转换 //将字符串按照某个字符去分割; 用某个字符串将数组里面的元素连接起来
+strchr()、strrchr()******* 返回字符中某个字符到最后的内容 //返回字符串中的某个字符到最后的内容，一个是从左边找这个字符，一个是右边找这个字符
+htmlspecialchars()****** 指定符号转成实体 //html实体, 把指定特殊符号转成实体,如$lt;&gt;
+html_entity_decode()上面的函数的反函数，将实体转成标签
+strlen(), mb_strlen() 获取字符串的长度//获取字符串长度
+
+单词大小写之间的转换
+strtolower() strtoupper() //单词大小写转换
+ucfirst(), ucwords(str) //字符串的第一字母大写; 每个单词首字母大写
+
+md5(str) md5加密//md5加密
+// substr(string string, int start, int [length]);
+// mb_substr与substr一样，只是第四个参数指定为utf-8;
+substr()、mb_substr() 从某个位置截取字符串 //截取字符串，从某个位置截取多长
+strpos()、strrpos() 查找某个字符出现的位置,分从左还是从右 //查找字符串中某个字符串出现的位置
+// str_replace(string $search, string $replace, string $str);
+//str_replace(array $search, string $replace, string $str);
+//str_replace(array $search, array $replace, string $str);
+str_replace()、str_ireplace() 替换字符//字符中替换某个字符, str_ireplace不区分大小写的搜索
+urlencode()、urldecode() 对url编码//url编码，url解码
+addslashes()、//自动转义, 把'' "" \等前面自动加上\
+stripslashes() //显示转移后的字符
+
+
+//==================数组常用函数========================================
+foreach($arr as $key => $value){}//用来遍历数组 
+foreach($arr as $value) {}//用来遍历数组
+$_GET[]//获取get参数的数组
+$_POST[]//获取post参数的数组
+$_REQUEST[]//获取get, post参数的数组
+$_SERVER[]//获取服务器相关参数的数组，包括请求头等
+$GLOBALS[]//获取全局变量的参数
+
+key()//返回数组中当前元素的键名
+current()//返回数组中当前元素的值
+next() //数组内部指针向前移一位
+prev() //数组内部指针倒回一位
+
+count()// 统计数组的元素的个数
+in_array()//判断某个元素是否在数组中
+array_key_exists(key, array)//检测某个健名是否在数组中
+array_filter(input,[callback])//对数组中的每个元素进行过滤，不传callback会过滤掉为false的，如果传callback的，当return true的时候，当前元素会被保留
+array_map(callback, arr1)//数组中的每个元素经过callback处理完之后，返回一个新的元素
+array_push(array, var)//向数组最后压入变量
+array_pop(array)//弹出数组最后的元素
+array_unshift(array, var)//向数组开头压入变量
+array_shift(array)//删除数组的第一个元素
+array_keys(input)//获取数组元素的所有键名
+array_values(input)//获取所有元素的值
+array_merge(array1)//合并数组,键名相同,后面覆盖前面;索引相同，后面的索引+1
+array_change_key_case(input)//数组里面所有元素的键名改为小写;
+
+var_export(expression)//1.把数据打印到页面中, 2.第二个参数如果为true的话，把数据格式化成php可以认识的代码(通过这种方式可以把格式化之后的数据，写到php文件里面供以后使用)
+
+
+// ============================文件处理==========================
+is_writable(filename)//判断文件是否可写
+is_readable(filename)//判断文件是否可读
+filesize(filename)//获取文件的尺寸
+file_get_contents(filename)//获取文件
+file_put_contents(filename, data)//向文件里面写入内容
+date_default_timezone_set(timezone_identifier)//设置时区
+filemtime(filename)//获取文件最后的修改时间
+
+
+// =========================目录操作=========================
+disk_total_space(directory)//返回磁盘所有的字节数
+disk_free_space(directory)//返回磁盘当前空闲的字节数
+pow(base, exp)//指数表达式
+basename(path)//获取文件路径里面的文件名称(路径最后斜杠到最后的面的内容)
+dirname(path)//获取文件的路劲
+file_exists(filename)//检查某个文件是否存在
+is_dir(filename)//检测某个目录是否存在
+mkdir(pathname)//创建某个目录
+rmdir(dirname)//删除指定的某个目录，这个目录必须是空的
+rename(oldname, newname)//给某个文件重命名
+copy(source, dest)//拷贝某个文件
+glob(pattern)//用来获取某个文件夹下面的所有的文件名，包括目录
+unlink(filename)//删除某个文件
+
+
+// ========================正则表达式========================
+preg_match(pattern, subject)//在字符串里面匹配某个模式，匹配到返回1，匹配不到返回0
+// 元字符
+\d \D \w \W \s(与任意一个空白字符匹配) \n换行符 \t制表符 \S 与除了空白符外任意一个字符匹配
+preg_replace(pattern, replacement, subject) //执行一个表达式的搜索和替换,返回替换的字符串
+preg_split(pattern, subject)//通过一个正则表达式去分割字符串
+
+// ========================上传与下载=================
+// php上传php.ini设置
+file_uploads=On/Off //是否允许文件上传
+upload_max_size=2M//上传文件的的最大大小
+post_max_size=8M //POST数据所允许的最大大小
+upload_tmp_dir //上传文件放置的临时目录
+$_FILES//超级全局数组
+$_FILES['userfile']['name']//客户端文件系统的文件名称
+$_FILES['userfile']['type']//客户端传递的文件的类型
+$_FILES['userfile']['size']//文件的字节的大小
+$_FILES['userfile']['tmp_name']//服务器存储的临时文件
+$_FILES['userfile']['error']//文件上传的错误代码
+// 文件上传错误信息
+0//没有错误放生，文件上传成功
+1//大小超过了php.ini中upload_max_filesize限制值    
+2//大小超过HTML表单中的MAX_FILE_SIZE选项指定的值
+3//文件只有部分被上传
+4//没有文件被上传
+is_uploaded_file(filename)//判断文件是否通过http post上传的合法上传文件
+move_uploaded_file(filename, destination)//将上传的文件移动到新的位
+
+// ====================面向对象===================
+面向对象和面向过程的核心区别是如何分配职责
+//实例对象的过程:1.在内存当中开辟出一块空间给这个对象 2.执行构造函数 3.返回对象的引用地址
+//对象产生的步骤
+1.对象引用被放到了'栈内存'里(栈存放固定内容)
+2.对象是放在"堆内存"里(堆存放可变内容)
+3.而静态成员则放到了'数据区',在第一次被加载的时候放入的，可以让堆内存里面的每个对象所共享
+4.函数和方法放在代码区
+public//公有，在类的内部与外部或子类可以访问,是最开发的权限
+private//私有的，定义类的属性和方法，在类的内部可以访问，在类的外部或子类都不可以访问
+protected//受保护的，定义类的属性和方法，在类的内部或子类可以访问，类的外部不可以访问
+$this//是当前对象的引用，一般出现在方法里，用于获取类的成员属性,或者执行类的成员方法
+self:://对本类的引用, 用于获取当前类的表态成员属性或静态成员方法
+parent:://对父类的引用, 调用父类的方法或属性
+__construct()//在创建对象时候自动执行,没有返回值，用于执行类的一些初始化工作
+__destruct()//用于对象在内存中被销毁时自动执行的方法, 不带任何参数
+__CLASS__//返回该类被定义时的名字(区分大小写)
+__METHOD__//返回该方法被定义时的名字(区分大小写)
+__DIR__//执行当前执行的php脚本所在的目录
+__FILE__//文件的完整路径和文件名,如果用在被包含文件中，则返回被包含的文件名
+__isset__//检测对象里面的私有成员属性是否存
+__unset__//是个共有的方法，用来删除对象里的室友成员属性
+__get()//获取对象未定义的属性时，自动运行的魔术函数
+__set()//给未定义的属性赋值时，自动运行的魔术函数,可以将set设置的未定义属性存到类的数组成员属性, get时再找相应变量索引
+__call()//调用一个未定义的方法时，自动执行的魔术函数,
+__autoload($className)//引用一个类时自动执行的函数,可以读入类文件,可以通过spl_autoload_register('a', 'run');来指定新的魔术函数,但是函数要是static的
+get_class_methods(class_name)//返回由类的方法名组成的数组
+get_class_vars(class_name)//返回由类的默认属性组成的关联数组(private与protected的属性无法获得)
+get_object_vars(object)//返回由对象属性组成的关联数组
+call_user_func_array(function, param_arr)//调用回调函数，并把一个数组参数作为回调函数的参数
+method_exists(object, method_name)//检查类的方法是否存在
+
+
+
+//===============================图像处理=================================
+
+// =======画图==========
+// php处理需要扩展库GD库的支持(通过phpinfo()函数查看GD库是否开启，如果没有开启在php.ini中开启)
+// ps：如果在画图的时候，输出图片的时候,但是图片出不来，这个时候把header头注释掉，查看报错信息
+设置响应头
+	header('Content-type:image/gif');
+	header('Content-type:image/jpeg');
+	header('Content-type:image/png');
+
+// 画布创建开始
+$img = imagecreatetruecolor(width, height)//创建画布
+$color = imageColorAllocate(img_resource,R,G,B)//设置颜色
+imagefill($img, x, y, $color)//填充颜色(x, y默认设置成0,0就行)
+// 画布创建结束
+
+//1. 绘制矩形 (x1,y1)为左上角坐标, (x2,y2)为右下角坐标
+imagerectangle(image, x1, y1, x2, y2, color)//绘制空心矩形
+imagefilledrectangle(image, x1, y1, x2, y2, color)//绘制填充好的实心矩形
+
+//2. 绘制圆(x,y)为圆心坐标。w为宽度, h为高度
+imageellipse(image, cx, cy, width, height, color)//绘制空心圆形
+imagefilledellipse(image, cx, cy, width, height, color)//绘制填充好的实心圆
+
+//3. 画线(x1, y1)为起始点坐标 (x2, y2)为结束点坐标
+imageline(image, x1, y1, x2, y2, color)
+
+//4. 画一个单一像素
+imagesetpixel(image, x, y, color)
+
+//5. 用TrueType字体向图像写入文本
+imagettftext(image, size, angle, x, y, color, fontfile, text)
+
+//6. 输出图像, 第二个可选参数为文件名时, 文件被另存; 同名会覆盖
+imagegif(img_resource[,filename])
+imagejpeg(img_resource[,filename])
+imagepng(img_resource[,filename])
+imagebmp(img_resource[,filename])
+
+//7. 释放资源
+imagedestroy(image)//图像输出完毕及时释放资源, 把内存空间留给更需要的程序;
+
+
+// ======对已有图像做特殊处理，缩略，水印
+//====打开图像
+imageCreateFromgd(filename/url)//打开图片， 返回一个资源类型
+$img = imageCreateFromgif('./test.gif')//打开图片 , 返回一个资源类型
+imageCreateFromjpeg(filename/url)//打开图片, 返回一个资源类型
+imageCreateFrompng(filename/url) //打开图片, 返回一个资源类型
+imageCreateFrombmp(filename/url)//打开图片, 返回一个资源类型
+
+//=====获取图像信息
+imagesx($img)//取得图片宽度
+imagesy($img)//取得图像宽度
+getimagesize($img)//获取图片大小
+
+//=====图像复制
+imagecopy(dst_im, src_im, dst_x, dst_y, src_x, src_y, src_w, src_h)//拷贝图片的一部分
+imagecopymerge(dst_im, src_im, dst_x, dst_y, src_x, src_y, src_w, src_h, pct)//拷贝并合并图像的一部分
+
+// 图像缩放
+imagecopyresized(dst_image, src_image, dst_x, dst_y, src_x, src_y, dst_w, dst_h, src_w, src_h)//拷贝图片并调整大小
+
+
+
+
+// ==================session和cookie===========
+setcookie(name,value,expire,path)//name 名字; value，值, expire, 过期的时间; path,在服务器端的有效路劲
+
+// ===cookie存储数组或对象
+serialize(value)//产生一个可存储的值得表示
+unserialize(str)//从已存储的表示中创建php的值
+
+// =====开启session
+session_start(oid)
+session//使用方法同get,post等使用方法相同, $_SESSION['var']即可使用
+
+// ====更改session配置
+session_id()//获取设置session_id
+session_name()//获取设置session_name
+session_save_path()//设置session在服务器端的保存位置，默认在tmp目录的php文件夹下面
+
+// ===清除session
+unset($_SESSION['web'])//删除session变量
+$_SESSION = array()//删除所有session变量, 不删除session文件
+session_unset(oid)//释放当前在内存当中已经创建的所有$_SESSION变量，但不删除session文件以及不释放对应的session id;
+session_destroy(oid)//删除当前用户对应的session文件以及释放sessinoid,内存中的$_SESSIONB变量内容依然保留
+session_unset();session_destroy(oid)//释放用户的session所有资源
+
+
+
+// ========================数据库=================
+/**
+ * 类型
+ tinyint
+ decimal 一般跟钱相关，m代表几位数字,n小数点
+ int整型
+ char定长 更快(指定长度，不够弥补)
+ varchar变长--可伸缩 更省(指定多长就存多长)
+ enum枚举类型(单选)
+ set类型(多选)
+ null表示没有空值
+ text长文本数据
+ unsigned 只保存正值
+ */
+mysql -uroot -p //登录数据库
+show databases; //显示数据库
+create database student charset utf8; //创建数据库 设置utf8(设置utf8是让让数据库可以存中文)
+drop database student //删除数据库
+select database();//查看当前所使用的数据库
+create table student(age tinyint); //创建表
+desc student;//查看student表结构
+insert into student set age = 1;//往表里面插入数据
+drop table student;//删除学生表
+create table student( age tinyint, money decimal(5, 2));//添加表
+insert into student set age=1, money = 100; 添加两个值
+show create table student;//查看表的sql语句
+desc 表名 //显示表结构
+drop table if exists 表名 //删除表
+create table 表名(列名 类型,..)//创建表
+
+default //设置默认值, 如果没有向这个字段插入内容，将使用默认值
+unique //约束表中列唯一数据， 一个表中可以有多个字段使用unique约束(用来约束表中某个字段的唯一性)
+primay key //也是用来约束表中某个字段的唯一性，一般是id;每个表都应该有个主键,并且每个表只能有一个主键
+auto_increment 用来修饰主键，每增加一条数据就会增加1, 默认的是用从1开始
+
+create table stu like stu;//复制表结构
+insert into stu select * from stu1//复制表数据
+create table stu select * from stu1//创建表同时复制数据
+select * from 表名 //查询数据
+as //使用别名
+where //指定查询条件
+and //左右两边都成立时返回记录
+or //左右两边都有一个成立即返回记录
+concat //连接字符串 select concat(name, email) from stu;
+select age, age > 22 as bigage from stu;//查询结果自身比较， 返回值1为ture,0为false
+distinct //select distinct name from stu; 过滤重复的记录, 返回唯一结果
+is null //select * from c where age is null ;判断字段值是否为空 
+is not null//select * from c where age is not null;判断字段值是否不为空
+if(表达式, 值1, 值2)//select age, if(age>41, '大'， '小') from c; 当表达式成立时返回值1，否则返回值2
+ifnull(字段，值) //select age, ifnull(age, '空') from c;
+
+order by //select * from stu order by age desc,qq;(对age降续，对qq升续) 对查询到的结果进行排序
+desc //select * from stu order by age desc;对查询结果进行降续排序
+asc //select * from stu order by age asc; 对查询结果进行升续排序
+
+limit(n)//select * from stu order by age desc limit 1;取出部分数据记录
+limit(m,n) //取出从m开始的n条数据, m以0开始计数
+
+between 值1 and 值2//select name,age from stu where age between 22 and 55;(查找22岁到55岁之间的人) 在值1与值2区间内检索内容
+in(值1，值2...)//select name,age from stu where age in(22,35,55)(查找年龄为22或35或55的人) 检测检索值是否在in表达式指定的值当中
+
+not between 值1 and 值2//select name,age from stu where age not between 22 and 55;(查找不在22岁到55岁之间的人) 匹配不在值1与2区间内出现的值
+not in(值1， 值2...)//select name,age from stu where age not in(22,35,55)(查找年龄不为22或35或35的人) 检测检索值是不在in表达式指定的值当中
+
+like //匹配字符串(select * from c where name like '李%';注:以李开头的)
+not like //select * from c where name not like '李%';不以李开头的
+// 注: %代表多个字符，_下划线代表1个字符
+
+left //slect left(name, 2) as lname from c1; 从左侧取字符串
+mid //select mid(name, 2,2) from c1; 从中间取字符串，参数2为起始字符串参数3为长度
+right //select right(name,2) as rname from c1; 从右侧取字符串
+rand()// select * from news order by rand() limit 6;
+
+// ======字符集=====
+show character set //查看服务器支持哪些字符集
+set names utf8;//设置客户端和服务端链接使用的字符集
+
+// ======字符集结束====
+
+
+// =====增删改查=========
+[insert, replace] into 表名(列名...) values(值...),(值...)//向表中插入记录
+// insert into stu(name, age) values('李四','1981-1-11') 
+update 表名 set 字段=值 where 条件//更新表记录
+// update stu set qq='1234', sex='女' where id = 1;更新表中id=1的记录，将qq和sex(性别)更新为新内容
+// 注: 条件不是必须的,但是如果没有条件将更新表中的所有记录,所以一定要加上条件
+delete from 表名 where 条件//删除记录
+// delete from stu3 where name like '李%' and age>30; 删除所有姓李的并且年龄大于30的人
+
+// ======mysql修改表结构====
+alter table 表名 rename 新表名//修改表名
+// alter table stu rename stu1;
+
+alter table 表名 change 旧字段 新字段[fist|after字段];//修改字段同时更名
+// alter table stu id cid int;修改字段id, 同时更改字段名
+
+alter table 表名 modify 字段[first|after 字段]//修改字段
+// alter table stu modify id int;
+
+alter table 表名 add 字段[first|after 字段] //
+// after table hdw add name varchar(60) first;在最前面增加字段name
+// after table hdw add age varchar(60) after name; 在名称后加字段
+
+alter table 表名 drop 字段名
+// alter table stu drop name; 删除表stu表中的name字段
+
+alter table 表名 add primary key(id);//添加主键id;
+
+alter table 表名 drop primary key;//删除主键
+// ========*******==============
+// 删除主键的前提是将修饰主键的auto_increment(递增)先去掉，就是修改这个字段，不设auto_increment，然后在删除主键就可以了
+
+select curdate()//获得当前日期, 年月日
+select curtime()//获得当前时间, 时分秒
+select now()//获得当前的日期与时间
+select version()//查看mysql 的版本
+
+date() //获得日期
+time()//获得时间
+year()//年
+month()//月
+day()//获得天
+hour()//时
+minute()//分
+second()//秒
+
+
+
+
+// =====================练习=================================
+//向stu表中插入两条数据
+insert into stu (name,ssex,sage,birthday) values ('王五','男',24,20000112);
+//将student表中id=15的数据：性别改为女，年龄改为30
+update stu set ssex='女',sage=30 where sid=16;
+//学生表中随机获取5条数据(stu)
+select * from stu order by rand() limit 5;
+//给student表添加一个time字段
+alter table stu add time int not null default 0;
+//删除学生表的time字段(stu)
+alter table stu drop time;
+//将name 字段修改为char(30)   (stu)
+alter table stu modify name char(30) not null default '';
+//删除学生表的主键(stu)
+alter table stu modify sid int;
+alter table stu drop primary key;
+//给student表添加主键自增
+alter table stu add primary key(sid);
+alter table stu modify sid int auto_increment;
+//查找90后的女同学【birthday】
+select * from stu where ssex='女' and year(birthday)>=1990;
+//查找班级年龄最小的同学【birthday】
+select * from stu order by birthday desc limit 1;
+//删除班级年龄最小的同学【age】
+delete from stu order by sage asc limit 1;
+
+
+// 创建student表，id,name,age字段
+create table student( id int primary key auto_increment, name varchar(10) not null default '', age tinyint unsigned not null default 0, sex enum('男','女') not null default '男' );
+//向stu表中插入两条数据(name, age)
+ insert into student (name, age) values('小一',11),('小二',12),('小三',14);
+//将student表中id=15的数据：性别改为女，年龄改为30
+update student set sex='女', age=30 where id =  15;
+//学生表中随机获取5条数据(stu)
+select * from student order by rand() limit 5;
+//给student表添加一个time字段
+alter table student  add time int not null default 0;
+//删除学生表的time字段(stu)
+alter table student drop time;
+//将name 字段修改为char(30)   (stu)
+alter table student modify  name char(30) not null default '';
+//删除学生表的主键(stu)
+// alter table student drop primary key;直接删除是删不了的，因为还有auto_increment在描述着这个主键，所以把auto_increment去掉就行了，就是重新定义id字段，不设auto_increment就行了
+alter table student modify id int;
+alter table student drop primary key;
+//给student表添加主键自增
+alter table student add primary key(id);
+alter table student modify id int auto_increment;
+//查找90后的女同学【birthday】
+select * from student where birthday > 19900913
+//查找班级年龄最小的同学【birthday】
+select * from student order by birthday desc limit 1;
+//删除班级年龄最小的同学【age】
+delete from student order by age limit 1;
+
+
+// ==================== $_SERVER 里面常用的变量======================
+$_SERVER['REQUEST_URI'] //请求参数
+
+
+
+
+// ==================== 微信开发 ==================================
+	
+simplexml_load_string( file_get_contents( 'php://input' ) , 'simpleXmlElement' , LIBXML_NOCDATA );
+file_get_contents('php://input') 用来获取用户提交过来的post数据，得到的是xml格式的数据
+simplexml_load_string(data) 用来将得到的xml数据转成对象形式
+realpath(path);
+class_exists('\CURLFile', false)//检测该类是否存; false:不让他走__autoload();如果不存在'@'.$file;
+json_decode(json, true)//将json转成数组，第二个参数必须是true,才能转成数组; 如果第二个参数不指定的话，默认是转成php对象
+realpath(path)
+sprintf(format)
+
+
+
+// ====================框架学习部分=============
+compact(varname)
+__callStatic()
+call_user_func_array(function, param_arr)
+
+
+//继承的另一种实现
+class News{
+
+	public static function save() {
+
+		echo 'save';
+	}
+
+	public static function __callStatic($name, $arguments){
+
+		static $cache = null;
+
+		if($cache) {
+
+			$cache = new Db();
+		}
+
+		call_user_func_array([$cache, $name], $arguments);
+	}
+}
+
+class Db{
+
+	public static function find($id) {
+
+		echo 'id' . $id;
+	}
+}
+
+$news = new News();
+
+$news::find(1);
+
+
+
+
+
+
+//============================框架用到的php函数==============
+phpversion()
+version_compare()
+spl_autoload_register();用来注册激活函数用的，如果php实例对象,发现类不存在，会去执行注册的函数
+spl_autoload_unregister()
+spl_autoload_unregister();
+PHP_VERSION_ID
+defined('HHVM_VERSION')
+function_exists('zend_loader_file_encoded')
+zend_loader_file_encoded()
+call_user_func()
+php里面的对象是否可以当成函数的参数进行传递
+hhvm虚拟机
+Closure 匿名函数，匿名函数就是没有定义的名字
+Closure 类代表匿名函数的类
+Closure::__construct — 用于禁止实例化的构造函数
+Closure::bind — 复制一个闭包，绑定指定的$this对象和类作用域。
+Closure::bindTo — 复制当前闭包对象，绑定指定的$this对象和类作用域。
+__invoke()可以使类变成闭包
+__call();
+call_user_func_array()用来调用类里面的某个成员方法
+trait 用来申明只能被继承的类
+
+http_build_query(query_data)
+
+__autoload   sql_autoload_register
+call_user_func
+prefixLengthsPsr4 prefixDirsPsr4 prefixesPsr0 classMap
+strtr strrpos substr
+
+trait
+is_file 检测的路径是以入口文件为起点
+ReflectionClass 反射类，通过反射类可以将类存成一个变量，取到里面的变量和方法
+\Closure
+array_merge
+array_reverse
+array_reduce
+闭包
+
+
+
+
+==================php 6.22号==============
+
+当使用命名空间的时候，要起别名的时候，要写全具体的类
+服务提供者，服务容器，控制反转，依赖注入，门面
+
+compact
+
+php里面的闭包，反射, 
+
+
+=================6.22号 概念理解================
+php： 服务提供者，服务容器，控制反转，依赖注入，反射
+
+
+io多路复用技术，nginx用的就是io多路复用技术(epoll模式)，通过跟中socket(i/o)流的状态，来管理多个socket(i/o)，就是一个线程监听i/o流的状态，让后不断的执行有数据的io
+
+nginx可能同时接受多个进来，epoll会把他们都监听起来，哪个有数据了就去处理谁
+
+============6.26==================
+extension_loaded
+php扩展(pdo, gd, curl, openssl)
+PHP_VERSION获取php版本
+$_SERVER 包含了主机的相关信息
+version_compare()
+fa fa-check-circle fa-times-circle alert-success
+
+
+==========6.27项目===================
+栏目封面也(不带分页)，栏目列表页面(不带分页的)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

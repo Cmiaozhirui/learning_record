@@ -1,0 +1,20 @@
+
+glob vinly buffer stream
+Duplex streams
+through2是对nodejs里面的可读可写流的一种转换
+
+php里面的反射，
+
+linux: posix Nohup命令 僵尸进程，孤儿进程, 守护进程, 实现守护进程，epoll, poll, 写时复制，sendfile,fork
+
+js：函数的作用域，作用域链在申明的时候就已经确定了
+
+node: request模块， iconv-lite模块, cheerio模块，串行执行(上个任务执行完，再执行下面的任务)，并行执行(任务同时进行）mysql模块, async模块, websocket模块
+
+
+
+统计: 友盟统计，百度统计
+
+登录: qq登录
+
+	
